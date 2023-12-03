@@ -1,0 +1,203 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+  <groupId>com.windcoder</groupId>
+  <artifactId>qy-cloud</artifactId>
+  <version>${revision}</version>
+  <name>${project.artifactId}</name>
+  <description>qy项目基础脚手架</description>
+  <url>https://github.com/iwinder/qy-cloud</url>
+
+  <properties>
+    <revision>0.1.0-snapshot</revision>
+    <!-- Maven 相关 -->
+    <java.version>21</java.version>
+    <source.encoding>UTF-8</source.encoding>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
+    <!--  mavn build 相关   -->
+    <git.commit.plugin>6.0.0</git.commit.plugin>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <spring-checkstyle-plugin.version>0.0.40</spring-checkstyle-plugin.version>
+    <spring-boot.version>3.2.0</spring-boot.version>
+  </properties>
+
+
+  <!--指定项目的父级依赖，这样一来，spring-boot-starter-parent 里定义的 Spring Boot 组件版本信息就会被自动带到子模块中。这种做法也是大多数 Spring Boot 项目的通用做法，不仅降低了依赖项管理的成本，也不需要担心各个组件间的兼容性问题。 -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.2.0</version>
+  </parent>
+
+  <modules>
+    <module>qy-bom</module>
+    <module>qy-common</module>
+    <module>qy-module-system</module>
+    <module>qy-module-bpm</module>
+
+
+  </modules>
+
+
+  <!--作用和 < parent > 标签类似，两者都是将版本信息向下传递 -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.windcoder</groupId>
+        <artifactId>qy-bom</artifactId>
+        <version>${revision}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <finalName>${project.name}</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <!--插件声明,作用和 < parent > 标签类似，两者都是将版本信息向下传递 -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <configuration>
+            <finalName>${project.build.finalName}</finalName>
+            <layers>
+              <enabled>true</enabled>
+            </layers>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+              <!-- 创建一个自动可执行的jar或war文件。它可以替换常规的artifact，或者用一个单独的classifier附属在maven构建的生命周期中。
+                spring-boot-maven-plugin 中的 repackage 打包出来 jar 包不可被依赖。-->
+                <goal>repackage</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- maven-surefire-plugin 插件，用于运行单元测试。 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+          <configuration>
+            <debug>false</debug>
+            <!-- 编译参数写在arg内 -->
+            <compilerArgs>
+            <!--   jdk中新增-parameters参数，开启此参数可以将编译后的class文件保留原码中的参数名
+                  保留参数名方便反射的时候判断参数，比如Mybatis中mapper中的参数，可以不加@Param显性指定           -->
+              <arg>-parameters</arg>
+            </compilerArgs>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <!--打包jar 与git commit 关联插件 统一 revision 版本-->
+      <plugin>
+        <groupId>io.github.git-commit-id</groupId>
+        <artifactId>git-commit-id-maven-plugin</artifactId>
+        <version>${git.commit.plugin}</version>
+        <executions>
+          <execution>
+            <id>get-the-git-infos</id>
+            <phase>initialize</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <failOnNoGitDirectory>false</failOnNoGitDirectory>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <!--因为项目定制了jackson的日期时间序列化/反序列化格式，因此这里要进行配置,不然通过management.info.git.mode=full进行完整git信息监控时会存在问题-->
+          <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>
+          <includeOnlyProperties>
+            <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+            <includeOnlyProperty>^git.commit.(id|message|time).*$</includeOnlyProperty>
+          </includeOnlyProperties>
+        </configuration>
+      </plugin>
+
+      <!--
+    代码格式插件，默认使用spring 规则，可运行命令进行项目格式化：./mvnw spring-javaformat:apply 或 mvn spring-javaformat:apply，可在IDEA中安装插件以下插件进行自动格式化：
+    https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin
+-->
+      <plugin>
+        <groupId>io.spring.javaformat</groupId>
+        <artifactId>spring-javaformat-maven-plugin</artifactId>
+        <version>${spring-checkstyle-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <inherited>true</inherited>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- 使用 huawei / aliyun 的 Maven 源，提升下载速度 -->
+  <repositories>
+    <repository>
+      <id>huaweicloud</id>
+      <name>huawei</name>
+      <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+    </repository>
+    <repository>
+      <id>aliyunmaven</id>
+      <name>aliyun</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>https://repo.spring.io/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+</project>
