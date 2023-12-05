@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("admin/system/user")
 public class UserController {
 
+
 }

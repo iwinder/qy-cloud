@@ -49,6 +49,18 @@
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
 
+        <!--validator请求参数校验-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+
+        <!--swagger  注解-->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
