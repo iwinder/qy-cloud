@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @TableName("`qy_system_user`")
 @Schema(description = "用户信息")
-public class UserDO extends TenantBaseDO {
+public class SysUserDO extends TenantBaseDO {
     /**
      * 用户ID
      */
