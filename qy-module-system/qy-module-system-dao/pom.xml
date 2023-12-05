@@ -19,15 +19,16 @@
 
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.windcoder</groupId>-->
-<!--            <artifactId>qy-common-mybatis</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.windcoder</groupId>
             <artifactId>qy-common-tenant</artifactId>
         </dependency>
 
+        <!-- DB 相关 -->
+<!--        <dependency>-->
+<!--            <groupId>com.windcoder</groupId>-->
+<!--            <artifactId>qy-common-mybatis</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

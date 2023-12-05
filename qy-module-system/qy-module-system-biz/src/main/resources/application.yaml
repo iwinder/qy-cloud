@@ -1,14 +1,16 @@
-# 项目的启动端口
 spring:
+  application:
+    # 定义项目名称
+    name: qy-system-serv
   cloud:
     nacos:
       discovery:
         # 可以配置多个，逗号分隔
-        server-addr: 192.168.100.16
+        server-addr: 192.168.100.16,127.0.0.1
         username: nacos
         password: nacos
         # 默认就是application name，一般不用配置
-        service: qy-system-serv
+        service: ${spring.application.name}
         # nacos客户端向服务端发送心跳的时间间隔，时间单位其实是ms
         heart-beat-interval: 5000
         # 服务端没有接受到客户端心跳请求就将其设为不健康的时间间隔，默认为15s
@@ -37,7 +39,7 @@ spring:
         watch:
           enabled: true
         watch-delay: 30000
-## MyBatis Plus 的配置项
+# MyBatis Plus 的配置项
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
@@ -52,9 +54,10 @@ mybatis-plus:
     banner: false # 关闭控制台的 Banner 打印
   type-aliases-package: ${qycloud.info.base-package}.dao.entity
   encryptor:
-    password: XDV71a+xqStEA3WH # 加解密的秘钥，可使用 https://www.imaegoo.com/2020/aes-key-generator/ 网站生成
+    password: YX57wkyNzB+P4RJS # 加解密的秘钥，可使用 https://www.imaegoo.com/2020/aes-key-generator/ 网站生成
 
-#qycloud:
-#  info:
-#    version: 1.0.0
-#    base-package: cn.windcoder.qy.module.system
+
+qycloud:
+  info:
+    version: 1.0.0
+    base-package: cn.windcoder.qy.module.system

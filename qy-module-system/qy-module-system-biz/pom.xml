@@ -24,6 +24,7 @@
 
 
     <dependencies>
+        <!--  业务依赖  -->
         <dependency>
             <groupId>com.windcoder</groupId>
             <artifactId>qy-module-system-api</artifactId>
@@ -35,43 +36,28 @@
             <version>${revision}</version>
         </dependency>
 
-        <!-- orm 模块-->
-<!--        <dependency>-->
-<!--            <groupId>com.baomidou</groupId>-->
-<!--            <artifactId>mybatis-plus-boot-starter</artifactId>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid-spring-boot-3-starter</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.baomidou</groupId>-->
-<!--            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- Nacos服务发现 -->
+        <!-- Nacos 服务发现 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
 
-
+<!--        &lt;!&ndash; DB 相关 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.windcoder</groupId>-->
+<!--            <artifactId>qy-common-mybatis</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <!-- 如果要以java -jar命令执行这个应用，记得把这个注解打开

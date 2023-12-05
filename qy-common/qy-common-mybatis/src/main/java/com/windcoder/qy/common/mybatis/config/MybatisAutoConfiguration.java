@@ -2,18 +2,16 @@ package com.windcoder.qy.common.mybatis.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.windcoder.qy.common.mybatis.core.handler.DefaultDBFieldHandler;
 import com.windcoder.qy.common.mybatis.core.plugins.QyPaginationInnerInterceptor;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
 
-@Configuration(proxyBeanMethods = false)
-public class MybatisAutoConfiguration implements WebMvcConfigurer {
+@AutoConfiguration
+@MapperScan("com.windcoder.qy.**.mapper")
+public class MybatisAutoConfiguration {
 
 
     /**
